@@ -1,5 +1,6 @@
 ﻿---
-title: build-tree.js - create an empty directory tree from a plaintext description
+title: build-tree.js
+description: Create an empty directory tree from a plaintext description
 author: Patrick Hall
 ---
 
