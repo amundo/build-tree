@@ -4,7 +4,7 @@ import { parse } from "jsr:@std/flags";
 
 // Parse command line arguments
 const flags = parse(Deno.args, {
-  boolean: ["force", "quiet", "help", "debug"],
+  boolean: ["force", "quiet", "help", "debug", "dump"],
   string: ["output", "indent-size"],
   alias: {
     f: "force",
@@ -18,6 +18,7 @@ const flags = parse(Deno.args, {
     force: false,
     quiet: false,
     debug: false,
+    dump: false,
     "indent-size": "auto" // "auto" or a number
   }
 });
@@ -36,6 +37,7 @@ if (flags.help) {
     -o, --output        Output directory (default: current directory)
     -d, --debug         Show debug information
     -i, --indent-size   Indentation size (default: auto)
+    --dump              Dump the intermediate data structure as JSON and exit
     -h, --help          Show this help message
   `);
   Deno.exit(0);
@@ -291,6 +293,14 @@ try {
   if (flags.debug) {
     log.debug("Parsed structure:");
     printStructure(structure);
+  }
+  
+  // If --dump flag is provided, output the JSON structure and exit
+  if (flags.dump) {
+    // Remove any circular references
+    const cleanStructure = JSON.parse(JSON.stringify(structure));
+    console.log(JSON.stringify(cleanStructure, null, 2));
+    Deno.exit(0);
   }
   
   // Create the directories and files

@@ -2,8 +2,7 @@
 title: build-tree.js - Create Directory Structures from Text
 author: Patrick Hall
 ---
-
-
+# Build Tree
 
 A flexible command-line tool for creating directory structures from text-based tree representations.
 
@@ -92,6 +91,7 @@ Options:
   -o, --output        Output directory (default: current directory)
   -d, --debug         Show debug information
   -i, --indent-size   Indentation size (default: auto)
+  --dump              Dump the intermediate data structure as JSON and exit
   -h, --help          Show this help message
 ```
 
@@ -112,6 +112,11 @@ deno run -A build-tree.js --force structure.txt
 deno run -A build-tree.js --indent-size=2 structure.txt
 ```
 
+**Dump intermediate data structure:**
+```bash
+deno run -A build-tree.js --dump structure.txt > structure.json
+```
+
 ## Adding File Content
 
 You can specify content for files using comments:
@@ -122,6 +127,43 @@ project/
 │   └── index.js  // content: console.log('Hello, world!');
 └── README.md     // content: # My Project
 ```
+
+### Advanced Features
+
+#### Data Structure Dump
+
+Use the `--dump` flag to output the parsed intermediate data structure as JSON without creating any files or directories. This is useful for debugging or using the parsed structure in other tools:
+
+```bash
+deno run -A build-tree.js --dump structure.txt > structure.json
+```
+
+The output will be a JSON representation of the directory tree, which looks like:
+
+```json
+{
+  "type": "directory",
+  "name": "project",
+  "children": [
+    {
+      "type": "directory",
+      "name": "src",
+      "children": [
+        {
+          "type": "file",
+          "name": "index.js",
+          "content": "console.log('Hello world');"
+        }
+      ]
+    }
+  ]
+}
+```
+
+This feature allows you to:
+- Validate the parsing logic
+- Use the structure in other tools or scripts
+- Debug complex directory structures
 
 ## Safety Features
 
