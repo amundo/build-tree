@@ -1,4 +1,4 @@
-/
+thing/
 ├── src/
 │   ├── models/
 │   │   ├── base/

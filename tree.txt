@@ -1,0 +1,17 @@
+project/
+├── components/
+│   ├── DataViewer.js         //(main component)
+│   ├── renderers/
+│   │   ├── ArrayRenderer.js
+│   │   ├── ObjectRenderer.js
+│   │   ├── SimpleRenderer.js
+│   │   └── index.js          //(exports all renderers)
+│   ├── utils/
+│   │   ├── TypeIdentifier.js
+│   │   └── Helpers.js
+│   └── editors/
+│       └── InlineEditor.js
+├── demo/
+│   ├── demo.html
+│   └── demo.css
+└── tests/

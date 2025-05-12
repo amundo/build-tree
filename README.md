@@ -1,90 +1,136 @@
-﻿---
-title: build-tree.js
-description: Create an empty directory tree from a plaintext description
+---
+title: build-tree.js - Create Directory Structures from Text
 author: Patrick Hall
 ---
 
 
-This is a simple script to create an empty directory tree from a plaintext description. It is intended to be used as a starting point for creating a directory structure for a new project.
 
-You can think of it as the inverse of the (UNIX `tree`)[https://en.wikipedia.org/wiki/Tree_(command)] command, which lists the contents of a directory in a format like one of the ones below.
+A flexible command-line tool for creating directory structures from text-based tree representations.
 
-## Input format
+## Overview
 
-The input is a plaintext file with one line per directory or file. 
+Build Tree allows you to quickly create directory structures from a text file containing a tree representation. It supports multiple formats including standard tree characters (`├──`, `│`) and simple indentation with spaces or tabs.
 
-The format is:
+## Installation
 
-```
-/
-├── src/
-│   ├── core/
-│   │   ├── Base.js
-│   │   ├── Helper.js
-│   │   └── index.js
-│   ├── data/
-│   │   ├── Store.js
-│   │   ├── Memory.js
-│   │   ├── FileStore.js
-│   │   └── index.js
-│   ├── api/
-│   │   ├── routes/
-│   │   │   ├── items.js
-│   │   │   ├── data.js
-│   │   │   └── actions.js
-│   │   ├── Server.js
-│   │   └── index.js
-│   └── index.js
-├── README.md
-└── LICENSE
+Clone this repository and make the script executable:
+
+```bash
+git clone https://github.com/yourusername/build-tree.git
+cd build-tree
+chmod +x build-tree.js
 ```
 
-Spaces may be used for indentation as well:
+## Requirements
 
-```
-/
-  src/
-    core/
-      Base.js
-      Helper.js
-      index.js
-    data/
-      Store.js
-      Memory.js
-      FileStore.js
-      index.j
-    api/
-      routes/
-        items.js
-        data.js
-        actions.js
-      Server.js
-      index.js
-    index.js
-  README.md
-  LICENSE
-```
-
-Anything which does _not_ end in a slash is considered a text file, and anything that does is considered a directory.
+- [Deno](https://deno.land/) runtime
 
 ## Usage
 
-
-To use this script, you will need to have `deno` installed. You can then run the script with the following command:
-
-```
-deno run --allow-read --allow-write build-tree.js <tree-file> <output-dir>
+```bash
+deno run -A build-tree.js [options] <structure-file>
 ```
 
-## Caveat
+### Basic Example
 
-I didn’t put much effort into this. YMMV.
+Create a file named `structure.txt`:
 
+```
+project/
+├── src/
+│   ├── models/
+│   │   └── User.js
+│   ├── utils/
+│   │   └── helpers.js
+│   └── index.js
+├── test/
+└── README.md
+```
 
-## TODO
+Then run:
 
-I don’t like the intial slash line, but I don’t feel like fixing it as it serves my current purposes. Maybe I’ll fix it later.
+```bash
+deno run -A build-tree.js structure.txt
+```
+
+This will create the directory structure in your current directory.
+
+### Indentation-Only Format
+
+Build Tree also supports simple indentation format:
+
+```
+project/
+    src/
+        models/
+            User.js
+        utils/
+            helpers.js
+        index.js
+    test/
+    README.md
+```
+
+The script automatically detects the format and indentation size.
+
+## Supported Formats
+
+1. **Tree Format**
+   - Uses tree characters (`├──`, `│`, `└──`)
+   - Traditional directory tree representation
+
+2. **Indentation Format**
+   - Uses spaces or tabs for indentation
+   - Simplifies tree representation without special characters
+
+## Options
+
+```
+Options:
+  -f, --force         Overwrite existing files/directories
+  -q, --quiet         Less verbose output
+  -o, --output        Output directory (default: current directory)
+  -d, --debug         Show debug information
+  -i, --indent-size   Indentation size (default: auto)
+  -h, --help          Show this help message
+```
+
+### Examples
+
+**Create structure in specific output directory:**
+```bash
+deno run -A build-tree.js -o my-project structure.txt
+```
+
+**Overwrite existing files and directories:**
+```bash
+deno run -A build-tree.js --force structure.txt
+```
+
+**Specify custom indentation size:**
+```bash
+deno run -A build-tree.js --indent-size=2 structure.txt
+```
+
+## Adding File Content
+
+You can specify content for files using comments:
+
+```
+project/
+├── src/
+│   └── index.js  // content: console.log('Hello, world!');
+└── README.md     // content: # My Project
+```
+
+## Safety Features
+
+Build Tree includes several safety features:
+
+- Never attempts to write to system root directory
+- Detects and prevents path traversal attacks
+- Warns about potentially dangerous operations
 
 ## License
 
-[WTFPL](./LICENSE)
+MIT License
